@@ -11,11 +11,8 @@ public class NumOneBits {
         int result = 0;
 
         while(n>0){
-            int reminder = n%2;
-            if(reminder == 1){
-                result++;
-            }
-            n = n/2;
+            result = result + (n & 1);
+            n = n >>> 1; //shift the number to the right, to check for next bit
         }
 
         return result;
