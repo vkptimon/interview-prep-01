@@ -11,16 +11,15 @@ public class DailyTemperatures {
     }
 
     public static int[] dailyTemperatures(int[] temperatures){
-        int arrSize = temperatures.length;
+       int arrSize = temperatures.length;
         int[] result = new int[arrSize];
         Stack<Integer> maxTempCheckingStack = new Stack<>();
-        for(int i=arrSize-1;i>=0;i--){
-            int count = 0;
-            int top = maxTempCheckingStack.isEmpty() ? 0 : maxTempCheckingStack.peek();
-            while(!maxTempCheckingStack.isEmpty() && temperatures[i]>temperatures[top]){
-                maxTempCheckingStack.pop();
+        for(int i=0;i<arrSize;i++){
+            int top = !maxTempCheckingStack.isEmpty() ? maxTempCheckingStack.peek() : 0;
+            while(!maxTempCheckingStack.isEmpty() && temperatures[i]>temperatures[maxTempCheckingStack.peek()]){
+                top = maxTempCheckingStack.pop();
+                result[top] = i-top;
             }
-            result[i] = maxTempCheckingStack.isEmpty() ? top : top - i;
             maxTempCheckingStack.push(i);
         }
 
