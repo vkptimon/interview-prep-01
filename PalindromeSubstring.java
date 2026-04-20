@@ -9,28 +9,32 @@ public class PalindromeSubstring {
 
     /*
     algorithm: 
-    - traverse through the string
-    - find a window, where it's a palindrome and keep incrementing the second pointer and calculate the sum of all possible combinations
-    (equals to sum of natural numbers till the lenght of the substring)
-    - when the window ends, set the first pointer to the end of window and increment the second pointer
-    - add the count to totalCount at the end of each round
+    - iterate through each character and perform expanding assuming it's an odd-length and even-length string
+    - in the expand-around-center method, we will check if the left and right pointers are present in the boundaries and
+    then check if the characters at those positions are same
+    - if so, then we will move towards the left and right, growing outward and then incrementing the count
+    - and then we will finally return the count, obtain from both odd-length and even-length ones
     */
     public static int countSubstrings(String str){
         int totalCount = 0;
-        int first = 0, second = 0;
-        while(first<second && second<str.length()){
-            int count = 0;
-            if(isPalindrome(str.substring(first, second))){
-                second++;
-                count = calSummationValue(second-first+1);
-            }else{
-                first = second;
-                second++;
-            }
-            totalCount+=count;
+        for(int i=0; i<str.length(); i++){
+            // for odd-length palindromes
+            totalCount += expandAroundCenter(str, i, i);
+            // for even-length palindromes
+            totalCount += expandAroundCenter(str, i, i+1);
         }
 
         return totalCount;
+    }
+
+    public static int expandAroundCenter(String str, int left, int right){
+        int count=0;
+        while(left>=0 && right<str.length() && str.charAt(left)==str.charAt(right)){
+            left--; //moving towards left, expanding
+            right++; //moving towards right, expanding
+            count++;
+        }
+        return count;
     }
 
     public static boolean isPalindrome(String subString){
@@ -44,7 +48,4 @@ public class PalindromeSubstring {
         return true;
     }
 
-    public static int calSummationValue(int subStringSize){
-        return (subStringSize*subStringSize+1)/2;
-    }
 }
