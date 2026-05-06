@@ -8,13 +8,9 @@ public class MaximumProductSubarray {
     public static int maxProduct(int[] nums){
         /**
          * The Rough algorithm would be like this
-         * we initialize two pointer first and last, where last = first+1 initially
-         * we keep calculating the product till we find a negative number or zero
-         * we increment last till a negative number is identified, and then we will search for another negative number
-         * the idea is to find out if the array has even number of negative numbers without a zero in-between
-         * if so, then we will calculate the product of all the number involved and then update, return the product value
-         * after being at an odd negative number, if there's no more negative number, then we will calculate the product value till that number
-         * if in-between a zero is present, then the window will be stopped and started again after the zero
+         * we need to initialize two variables maxEndingHere and minEndingHere, both initialized to the first element of the array
+         * while looping the remaining elements, we need to update the max and min endings based on if the number is positive or negative
+         * for a positive number, we will calculate the max and min in the normal way but it get's inverted if it's a negative number
          */
 
         int maxProduct = nums[0];
@@ -26,7 +22,7 @@ public class MaximumProductSubarray {
 
         for(int i=1; i<nums.length; i++){
             int currentNum = nums[i];
-            
+
             int previousMax = maxEndingHere;
 
             if(currentNum > 0){
@@ -36,7 +32,7 @@ public class MaximumProductSubarray {
                 maxEndingHere = Math.max(currentNum, minEndingHere*currentNum);
                 minEndingHere = Math.min(currentNum, previousMax*currentNum);
             }
-            
+
             maxProduct = Math.max(maxProduct, maxEndingHere);
         }
 

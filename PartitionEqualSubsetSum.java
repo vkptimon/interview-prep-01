@@ -15,7 +15,7 @@ public class PartitionEqualSubsetSum {
          * if it exceeds total/2 with a particular number combination, then we need to remove that too from the subset array
          * if all the possible combinations are explored, we will check, out of the loop, if the subset sum == total/2
          * if it is, return true; else false
-         * 
+         *
          * added a memoization table, because without it, the some (start, currentSum) combinations are getting executed redundantly
          * this lead to leetcode showing LTE, hence implemented it with help from devstral
          * before returning the value, we will store it in the table memo at (start, currentSum) co-ordinates
@@ -43,7 +43,7 @@ public class PartitionEqualSubsetSum {
             return false;
         else if(start >= nums.length)
             return false;
-        
+
         // FIX: Check memo before computing
         // Previously: No memoization, leading to exponential time complexity
         if(memo[start][currentSum] != null) {
@@ -58,7 +58,7 @@ public class PartitionEqualSubsetSum {
             // skipping duplicates
             while (i+1<nums.length && nums[i+1]==nums[i]) { i++; }
         }
-        
+
         // FIX: Store result in memo before returning
         // Previously: Results were not cached, causing redundant calculations
         memo[start][currentSum] = false;
