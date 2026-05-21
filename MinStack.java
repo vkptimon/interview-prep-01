@@ -1,3 +1,4 @@
+import java.util.Stack;
 
 /** Rough Approach
  * The operations push, pop, top can be implemented as is using native stack with O(1) T.C
@@ -11,23 +12,45 @@
 
 
 public class MinStack {
+
+    Stack<Integer> mainStack = new Stack<>();
+    Stack<Integer> monotonicStack = new Stack<>();
+
     public static void main(String[] args) {
-        
+        MinStack minStack = new MinStack();
+        minStack.push(-2);
+        minStack.push(0);
+        minStack.push(-1);
+
+        System.out.println("min: "+minStack.getMin());
+        System.out.println("top: "+minStack.top());
+
+        minStack.pop();
+        System.out.println("min: "+minStack.getMin());
     }
 
-    public static void push(int val){
+    public void push(int val){
+        mainStack.push(val);
 
+        if(monotonicStack.empty())
+            monotonicStack.push(val);
+        else{
+            //inserting the min val again so it would be easier to perform operations with the same depth as mainStack
+            monotonicStack.push( Math.min(val, monotonicStack.peek()) );
+        }
     }
     
-    public static void pop(){
+    public void pop(){
+        mainStack.pop();
 
+        monotonicStack.pop();
     }
 
-    public static int top(){
-
+    public int top(){
+        return mainStack.peek();
     }
 
-    public static int getMin(){
-
+    public int getMin(){
+        return monotonicStack.peek();
     }
 }
