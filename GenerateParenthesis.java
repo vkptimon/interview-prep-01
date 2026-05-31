@@ -24,22 +24,29 @@ public class GenerateParenthesis {
         */
 
         List<String> result = new ArrayList<>();
-        backtrack(result, "", 0, 0, n);
+        StringBuilder currentString = new StringBuilder("");
+        backtrack(result, currentString, 0, 0, n);
         return result;
     }
 
-    public static void backtrack(List<String> result, String currentString, int openCount, int closeCount, int n){
+    public static void backtrack(List<String> result, StringBuilder currentString, int openCount, int closeCount, int n){
         if( openCount == n && closeCount == n ){
-            result.add(currentString);
+            result.add(currentString.toString());
             return;
         }
 
         // adding '(' if we still have open braces left
-        if( openCount < n )
-            backtrack(result, currentString + "(", openCount + 1, closeCount, n);
+        if( openCount < n ){
+            currentString.append("(");
+            backtrack(result, currentString, openCount + 1, closeCount, n);
+            currentString.deleteCharAt(currentString.length() - 1); //backtrack
+        }
 
         //adding ')' if it won't make sequence invalid
-        if( closeCount < openCount )
-            backtrack(result, currentString + ")", openCount, closeCount + 1, n);
+        if( closeCount < openCount ){
+            currentString.append(")");
+            backtrack(result, currentString, openCount, closeCount + 1, n);
+            currentString.deleteCharAt(currentString.length() - 1); //backtrack
+        }
     }
 }
