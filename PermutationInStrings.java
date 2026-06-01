@@ -32,31 +32,30 @@ public class PermutationInStrings {
         if (s1.length() > s2.length()) return false;
 
         Map<Character, Integer> searchStringFreqMap = new HashMap<>();
-        // FIX: Use merge() so duplicate characters in s1 are counted correctly
-        // (putIfAbsent only inserts once per key, ignoring duplicates)
+        // SIMPLIFIED: Replaced merge() with getOrDefault()
         for(int i = 0; i < s1.length(); i++){
-            searchStringFreqMap.merge(s1.charAt(i), 1, Integer::sum);
+            char c = s1.charAt(i);
+            searchStringFreqMap.put(c, searchStringFreqMap.getOrDefault(c, 0) + 1);
         }
 
         int first = 0;
         int second = s1.length() - 1;
         Map<Character, Integer> targetStringFreqMap = new HashMap<>();
 
-        // FIX: Build the initial window [first..second] by iterating over ALL characters in-between
-        // (the original loop only touched s2[first] and s2[second], skipping middle chars)
+        // SIMPLIFIED: Replaced merge() with getOrDefault()
         for(int i = first; i <= second; i++){
-            targetStringFreqMap.merge(s2.charAt(i), 1, Integer::sum);
+            char c = s2.charAt(i);
+            targetStringFreqMap.put(c, targetStringFreqMap.getOrDefault(c, 0) + 1);
         }
 
         // FIX: Check the first window before entering the slide loop
         if (searchStringFreqMap.equals(targetStringFreqMap)) return true;
 
-        // FIX: Slide the window one character at a time
-        // Remove the leftmost char then add the new char on the right
+        // SIMPLIFIED: Replaced merge() with standard get/put
         while (second < s2.length() - 1) {
             // Remove the character leaving the window at index 'first'
             char leftChar = s2.charAt(first);
-            targetStringFreqMap.merge(leftChar, -1, Integer::sum);
+            targetStringFreqMap.put(leftChar, targetStringFreqMap.get(leftChar) - 1);
             if (targetStringFreqMap.get(leftChar) == 0) {
                 targetStringFreqMap.remove(leftChar);
             }
@@ -64,7 +63,9 @@ public class PermutationInStrings {
             // Advance the window and add the new character at index 'second+1'
             first++;
             second++;
-            targetStringFreqMap.merge(s2.charAt(second), 1, Integer::sum);
+
+            char rightChar = s2.charAt(second);
+            targetStringFreqMap.put(rightChar, targetStringFreqMap.getOrDefault(rightChar, 0) + 1);
 
             if(searchStringFreqMap.equals(targetStringFreqMap))
                 return true;
